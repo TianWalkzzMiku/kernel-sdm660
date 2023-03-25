@@ -1,0 +1,25 @@
+version: 2.1
+jobs:
+  build:
+    docker:
+      - image: okta10/docker:ubuntu
+    steps:
+      - run:
+          name: Building #DEAGLE Kernel
+          command: |
+            wget https://raw.githubusercontent.com/TianWalkzzMiku/kernel-sdm660/deagle/build-start.sh
+            bash build-start.sh stable clang
+            cd kernel
+            wget https://raw.githubusercontent.com/TianWalkzzMiku/kernel-sdm660/deagle/build.sh
+            bash build.sh tulip newcam clang
+            bash build.sh tulip oldcam clang
+            bash build.sh whyred newcam clang
+            bash build.sh whyred oldcam clang
+            git apply oc.patch
+            bash build.sh tulip newcam oc clang
+            bash build.sh tulip oldcam oc clang
+            bash build.sh whyred newcam oc clang
+            bash build.sh whyred oldcam oc clang
+            wget https://raw.githubusercontent.com/TianWalkzzMiku/kernel-sdm660/deagle/build-final.sh
+            bash build-final.sh clang
+            
